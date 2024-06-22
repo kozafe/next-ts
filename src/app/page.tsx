@@ -19,11 +19,7 @@ export const metadata: Metadata = {
 const Home: React.FC = async () => {
   const data = await refetch();
 
-  return (
-    <>
-      <ListPage {...data} />
-    </>
-  );
+  return <ListPage {...data} />;
 };
 
 export default Home;

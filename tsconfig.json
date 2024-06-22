@@ -12,6 +12,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noEmit": true,
+    "noEmitOnError": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

@@ -1,6 +1,7 @@
 "use client";
 
 import { splitArray } from "@/tools";
+import React from "react";
 
 interface Product {
   id: number;
@@ -30,26 +31,45 @@ export interface Products {
   products: Product[];
 }
 
-export const ListPage = (res: Products) => {
+interface ProductsList extends Products {
+  split: number;
+}
+
+export const ListPage = (res: ProductsList) => {
   const { products } = res;
 
-  const splitted = splitArray<Product>(products, 2);
+  const splitted = splitArray<Product | null>(products, 4);
 
   return (
-    <div style={{ margin: 24 }}>
-      <h1>NEXT TS CRUD</h1>
+    <div className="m-4">
+      <h1 className="mb-4">
+        This project is built using:{" "}
+        <span style={{ fontWeight: "bold" }}>NEXT + TypeScript</span>
+      </h1>
       {splitted.map((array, index) => (
-        <div key={index} className="flex" style={{ flexDirection: "row" }}>
+        <div key={index} className="flex flex-row justify-between mb-4">
           {array.map((item, index) => {
-            const { title } = item;
+            // if (!item) return <div style={{ width: "49%" }}></div>;
+            const { title, thumbnail, rating, price } = item || {};
 
             return (
-              <div key={index}>
+              <div
+                key={index}
+                style={{
+                  width: "49%",
+                  borderRadius: 12,
+                  padding: 12,
+                  borderWidth: 1,
+                }}
+                className="flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 m-4 inline"
+              >
+                <img src={thumbnail} className="h-40 object-contain" />
+                <p style={{ fontWeight: "bold" }}>USD {price}</p>
                 {title}
-
-                <button className="delay-100 duration-100 transform hover:scale-125 transition ease-linear bg-teal-400 px-6 py-2 m-4 inline">
-                  100
-                </button>
+                <div>⭐ {rating}</div>
+                {/* <button className="delay-100 duration-100 transform hover:scale-105 transition ease-linear bg-teal-400 px-6 py-2 m-4 inline">
+                  Open details
+                </button> */}
               </div>
             );
           })}
