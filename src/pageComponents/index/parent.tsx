@@ -39,12 +39,19 @@ export const ListPage = (res: Products) => {
     <div style={{ margin: 24 }}>
       <h1>NEXT TS CRUD</h1>
       {splitted.map((array, index) => (
-        <div key={index}>
+        <div key={index} className="flex" style={{ flexDirection: "row" }}>
           {array.map((item, index) => {
             const { title } = item;
-            console.log("title:", title);
 
-            return <div key={index}>{title}</div>;
+            return (
+              <div key={index}>
+                {title}
+
+                <button className="delay-100 duration-100 transform hover:scale-125 transition ease-linear bg-teal-400 px-6 py-2 m-4 inline">
+                  100
+                </button>
+              </div>
+            );
           })}
         </div>
       ))}
