@@ -1,5 +1,7 @@
 "use client";
 
+import { splitArray } from "@/tools";
+
 interface Product {
   id: number;
   title: string;
@@ -31,13 +33,21 @@ export interface Products {
 export const ListPage = (res: Products) => {
   const { products } = res;
 
+  const splitted = splitArray<Product>(products, 2);
+
   return (
     <div style={{ margin: 24 }}>
       <h1>NEXT TS CRUD</h1>
-      {products.map((item, index) => {
-        const { title } = item;
-        return <div key={index}>{title}</div>;
-      })}
+      {splitted.map((array, index) => (
+        <div key={index}>
+          {array.map((item, index) => {
+            const { title } = item;
+            console.log("title:", title);
+
+            return <div key={index}>{title}</div>;
+          })}
+        </div>
+      ))}
     </div>
   );
 };
