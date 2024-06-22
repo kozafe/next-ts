@@ -36,9 +36,10 @@ interface ProductsList extends Products {
 }
 
 export const ListPage = (res: ProductsList) => {
-  const { products } = res;
+  const { products, split } = res;
 
-  const splitted = splitArray<Product | null>(products, 4);
+  const splitted = splitArray<Product | null>(products, split);
+  const width = `${100 / split}%`;
 
   return (
     <div className="m-4">
@@ -49,14 +50,14 @@ export const ListPage = (res: ProductsList) => {
       {splitted.map((array, index) => (
         <div key={index} className="flex flex-row justify-between mb-4">
           {array.map((item, index) => {
-            // if (!item) return <div style={{ width: "49%" }}></div>;
+            if (!item) return <div style={{ width }} key={index} />;
             const { title, thumbnail, rating, price } = item || {};
 
             return (
               <div
                 key={index}
                 style={{
-                  width: "49%",
+                  width,
                   borderRadius: 12,
                   padding: 12,
                   borderWidth: 1,
@@ -67,9 +68,6 @@ export const ListPage = (res: ProductsList) => {
                 <p style={{ fontWeight: "bold" }}>USD {price}</p>
                 {title}
                 <div>⭐ {rating}</div>
-                {/* <button className="delay-100 duration-100 transform hover:scale-105 transition ease-linear bg-teal-400 px-6 py-2 m-4 inline">
-                  Open details
-                </button> */}
               </div>
             );
           })}
