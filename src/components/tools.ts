@@ -1,3 +1,5 @@
+"use client";
+
 export const splitArray = <T>(array: (T | null)[], chunkSize: number) => {
   let arrayModified = array;
   let result = [];

@@ -1,8 +1,9 @@
 "use client";
 
-import { splitArray } from "@/tools";
-import Link from "next/link";
-import React from "react";
+import { splitArray } from "@/components/tools";
+import { useDimensions } from "@/hooks/dimensions";
+import { Pagination } from "./pagination";
+import { Textfield } from "@/components/inputs";
 
 interface Product {
   id: number;
@@ -32,12 +33,12 @@ export interface Products {
   products: Product[];
 }
 
-interface ProductsList extends Products {
-  split: number;
-}
+export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
+  const { products, endReached } = res;
 
-export const ListPage = (res: ProductsList) => {
-  const { products, split } = res;
+  const { isTabOrPhone } = useDimensions();
+
+  const split = isTabOrPhone ? 2 : 5;
 
   const splitted = splitArray<Product | null>(products, split);
   const width = `${100 / split}%`;
@@ -48,40 +49,46 @@ export const ListPage = (res: ProductsList) => {
         This project is built using:{" "}
         <span style={{ fontWeight: "bold" }}>NEXT + TypeScript</span>
       </h1>
-      {splitted.map((array, index) => (
-        <div key={index} className="flex flex-row justify-between mb-4">
-          {array.map((item, index) => {
-            const className =
-              "flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 m-4 inline";
-
-            if (!item) return <div style={{ width }} className={className} />;
-
-            const { title, thumbnail, rating, price } = item;
-
-            return (
-              <div
-                key={index}
-                style={{
-                  borderRadius: 12,
-                  padding: 12,
-                  borderWidth: 1,
-                  width,
-                }}
-                className={className}
-              >
-                <img src={thumbnail} className="h-40 object-contain" />
-                <p style={{ fontWeight: "bold" }}>USD {price}</p>
-                {title}
-                <div>⭐ {rating}</div>
-              </div>
-            );
-          })}
-        </div>
-      ))}
-      <div>
-        <Link href={"?page=1"}>Previous</Link>
-        <Link href={"?page=2"}>Next</Link>
+      <div className="flex flex-row justify-center my-4">
+        <Textfield />
       </div>
+      {splitted.map((array, index) => {
+        const isNotExist = !array.find((item) => item);
+
+        if (isNotExist) return null;
+
+        return (
+          <div key={index} className="flex flex-row justify-between mb-4">
+            {array.map((item, index) => {
+              const className =
+                "flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 m-4 inline";
+
+              if (!item) return <div style={{ width }} className={className} />;
+
+              const { title, thumbnail, rating, price } = item;
+
+              return (
+                <div
+                  key={index}
+                  style={{
+                    borderRadius: 12,
+                    padding: 12,
+                    borderWidth: 1,
+                    width,
+                  }}
+                  className={className}
+                >
+                  <img src={thumbnail} className="h-40 object-contain" />
+                  <p style={{ fontWeight: "bold" }}>USD {price}</p>
+                  {title}
+                  <div>⭐ {rating}</div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+      <Pagination isLastDisabled={endReached} />
     </div>
   );
 };
