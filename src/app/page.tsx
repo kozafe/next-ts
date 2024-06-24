@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 
 const refetch = async () => {
   const { data } = await axios.get<Products>(
-    "https://dummyjson.com/products?limit=10"
+    "https://dummyjson.com/products?limit=20"
   );
 
   return data;
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 const Home: React.FC = async () => {
   const data = await refetch();
 
-  return <ListPage {...data} split={4} />;
+  return <ListPage {...data} split={5} />;
 };
 
 export default Home;

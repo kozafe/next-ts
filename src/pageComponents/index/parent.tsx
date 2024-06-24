@@ -1,6 +1,7 @@
 "use client";
 
 import { splitArray } from "@/tools";
+import Link from "next/link";
 import React from "react";
 
 interface Product {
@@ -50,19 +51,23 @@ export const ListPage = (res: ProductsList) => {
       {splitted.map((array, index) => (
         <div key={index} className="flex flex-row justify-between mb-4">
           {array.map((item, index) => {
-            if (!item) return <div style={{ width }} key={index} />;
-            const { title, thumbnail, rating, price } = item || {};
+            const className =
+              "flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 m-4 inline";
+
+            if (!item) return <div style={{ width }} className={className} />;
+
+            const { title, thumbnail, rating, price } = item;
 
             return (
               <div
                 key={index}
                 style={{
-                  width,
                   borderRadius: 12,
                   padding: 12,
                   borderWidth: 1,
+                  width,
                 }}
-                className="flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 m-4 inline"
+                className={className}
               >
                 <img src={thumbnail} className="h-40 object-contain" />
                 <p style={{ fontWeight: "bold" }}>USD {price}</p>
@@ -73,6 +78,10 @@ export const ListPage = (res: ProductsList) => {
           })}
         </div>
       ))}
+      <div>
+        <Link href={"?page=1"}>Previous</Link>
+        <Link href={"?page=2"}>Next</Link>
+      </div>
     </div>
   );
 };
