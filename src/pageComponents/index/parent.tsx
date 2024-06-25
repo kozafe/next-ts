@@ -1,11 +1,10 @@
 "use client";
 
-import { splitArray } from "@/components/tools";
-import { useDimensions } from "@/hooks/dimensions";
-import { Pagination } from "./pagination";
 import { Textfield } from "@/components/inputs";
+import Link from "next/link";
+import { Pagination } from "./pagination";
 
-interface Product {
+export interface Product {
   id: number;
   title: string;
   description: string;
@@ -24,6 +23,7 @@ interface Product {
   returnPolicy: string;
   minimumOrderQuantity: number;
   thumbnail: string;
+  images: string[];
 }
 
 export interface Products {
@@ -36,12 +36,7 @@ export interface Products {
 export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
   const { products, endReached } = res;
 
-  const { isTabOrPhone } = useDimensions();
-
-  const split = isTabOrPhone ? 2 : 5;
-
-  const splitted = splitArray<Product | null>(products, split);
-  const width = `${100 / split}%`;
+  const isEmpty = !products.length;
 
   return (
     <div className="m-4">
@@ -52,29 +47,30 @@ export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
       <div className="flex flex-row justify-center my-4">
         <Textfield />
       </div>
-      {splitted.map((array, index) => {
-        const isNotExist = !array.find((item) => item);
-
-        if (isNotExist) return null;
-
-        return (
-          <div key={index} className="flex flex-row justify-between mb-4">
-            {array.map((item, index) => {
+      {isEmpty ? (
+        <div
+          className="flex flex-row justify-center "
+          style={{ height: "60vh", alignItems: "center" }}
+        >
+          <p>Product not found</p>
+        </div>
+      ) : (
+        <>
+          <div className="product-grid mb-4 flex flex-row justify-between">
+            {products.map((item, index) => {
               const className =
-                "flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 m-4 inline";
+                "flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 inline mb-6";
 
-              if (!item) return <div style={{ width }} className={className} />;
-
-              const { title, thumbnail, rating, price } = item;
+              const { title, thumbnail, rating, price, id } = item;
 
               return (
-                <div
+                <Link
+                  href={`/${id}`}
                   key={index}
                   style={{
                     borderRadius: 12,
                     padding: 12,
                     borderWidth: 1,
-                    width,
                   }}
                   className={className}
                 >
@@ -82,13 +78,13 @@ export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
                   <p style={{ fontWeight: "bold" }}>USD {price}</p>
                   {title}
                   <div>⭐ {rating}</div>
-                </div>
+                </Link>
               );
             })}
           </div>
-        );
-      })}
-      <Pagination isLastDisabled={endReached} />
+          <Pagination isLastDisabled={endReached} />
+        </>
+      )}
     </div>
   );
 };

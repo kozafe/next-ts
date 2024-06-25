@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 18vw);
+  gap: 0px; /* Adjust the gap as needed */
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 45vw);
+  }
+}

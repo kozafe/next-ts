@@ -1,17 +1,14 @@
-import { useDebounce } from "@/hooks/debounce";
-import { useEffect, useState } from "react";
+"use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export const Textfield = () => {
-  const [value, setValue] = useState("");
+  const searchParams = useSearchParams();
+  const q = searchParams.get("q") || "";
 
-  const debounced = useDebounce<string>(value, 400);
+  const [value, setValue] = useState(q);
 
-  const [isFirstRender, setIsFirstRender] = useState(true);
-
-  useEffect(() => {
-    if (isFirstRender) return setIsFirstRender(false);
-    console.log("debounced:", debounced);
-  }, [debounced]);
+  const { push } = useRouter();
 
   return (
     <input
@@ -20,6 +17,11 @@ export const Textfield = () => {
       className="px-4 py-2"
       value={value}
       onChange={(e) => setValue(e.target.value)}
+      onKeyDown={(e) => {
+        const isEnter = e.code == "Enter";
+        if (!isEnter) return;
+        push(`?q=${value}`);
+      }}
     />
   );
 };
