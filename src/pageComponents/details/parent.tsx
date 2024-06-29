@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Product } from "../index/parent";
+import { Product, clickableProps } from "../index/parent";
+import Image from "next/image";
 
 export const DetailsPage = (props: Product) => {
   const { images } = props;
@@ -10,17 +11,30 @@ export const DetailsPage = (props: Product) => {
 
   return (
     <div className="m-4">
-      <img src={images[imageIndex]} style={{ width: 400 }} />
-      <div style={{ gap: 8 }} className="flex flex-row">
-        {images?.map((item, index) => (
+      <div style={{ width: 400 }}>
+        <div style={{ height: 400 }} className="flex justify-center">
           <img
-            key={index}
-            src={item}
-            style={{ width: 100, borderWidth: 1, borderRadius: 4 }}
-            onClick={() => setImageIndex(index)}
-            className="cursor-pointer"
+            src={images[imageIndex]}
+            style={{ maxWidth: 400, maxHeight: 400 }}
           />
-        ))}
+        </div>
+        <div style={{ gap: 8, overflowX: "auto" }} className="flex flex-row">
+          {images?.map((item, index) => (
+            <Image
+              alt="failed to load image"
+              key={index}
+              src={item}
+              width={124}
+              height={124}
+              {...clickableProps({
+                maxWidth: 124,
+                maxHeight: 124,
+                objectFit: "contain",
+              })}
+              onClick={() => setImageIndex(index)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

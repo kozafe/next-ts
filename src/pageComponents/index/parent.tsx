@@ -3,6 +3,17 @@
 import { Textfield } from "@/components/inputs";
 import Link from "next/link";
 import { Pagination } from "./pagination";
+import { CSSProperties } from "react";
+
+export const clickableProps = (style?: CSSProperties, className = "") => ({
+  style: {
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    ...style,
+  },
+  className: `flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 inline mb-6 ${className}`,
+});
 
 export interface Product {
   id: number;
@@ -58,23 +69,15 @@ export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
         <>
           <div className="product-grid mb-4 flex flex-row justify-between">
             {products.map((item, index) => {
-              const className =
-                "flex flex-col cursor-pointer border-teal-200 delay-100 duration-100 transform hover:scale-105 transition ease-linear px-6 py-2 inline mb-6";
-
               const { title, thumbnail, rating, price, id } = item;
 
               return (
-                <Link
-                  href={`/${id}`}
-                  key={index}
-                  style={{
-                    borderRadius: 12,
-                    padding: 12,
-                    borderWidth: 1,
-                  }}
-                  className={className}
-                >
-                  <img src={thumbnail} className="h-40 object-contain" />
+                <Link href={`/${id}`} key={index} {...clickableProps()}>
+                  <img
+                    src={thumbnail}
+                    className="h-40 object-contain"
+                    style={{ maxHeight: "100%" }}
+                  />
                   <p style={{ fontWeight: "bold" }}>USD {price}</p>
                   {title}
                   <div>⭐ {rating}</div>
