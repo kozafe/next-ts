@@ -2,8 +2,9 @@
 
 import { Textfield } from "@/components/inputs";
 import Link from "next/link";
-import { Pagination } from "./pagination";
 import { CSSProperties } from "react";
+import { Pagination } from "./pagination";
+import { Category } from "@/components/colors";
 
 export const clickableProps = (style?: CSSProperties, className = "") => ({
   style: {
@@ -69,8 +70,7 @@ export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
         <>
           <div className="product-grid mb-4 flex flex-row justify-between">
             {products.map((item, index) => {
-              const { title, thumbnail, rating, price, id } = item;
-
+              const { title, thumbnail, rating, price, id, category } = item;
               return (
                 <Link href={`/${id}`} key={index} {...clickableProps()}>
                   <img
@@ -78,7 +78,19 @@ export const ListPage = (res: { products: Product[]; endReached: boolean }) => {
                     className="h-40 object-contain"
                     style={{ maxHeight: "100%" }}
                   />
-                  <p style={{ fontWeight: "bold" }}>USD {price}</p>
+                  <div className="flex flex-row justify-between">
+                    <p style={{ fontWeight: "bold" }}>USD {price}</p>
+                    <Category
+                      string={category}
+                      style={{
+                        maxWidth: "50%",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                      }}
+                    />
+                  </div>
+
                   {title}
                   <div>⭐ {rating}</div>
                 </Link>

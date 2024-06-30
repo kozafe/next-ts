@@ -2,6 +2,19 @@ import { ListPage, Products } from "@/pageComponents/index/parent";
 import axios from "axios";
 import React from "react";
 
+const removeDuplicates = (array: any[]) => {
+  const result = array.reduce((acc, current) => {
+    const x = acc.find((item: any) => item === current);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, []);
+
+  return result;
+};
+
 const refetch = async (params: { page: string; q: string }) => {
   const { page = "1", q = "" } = params;
   const per_page = 20;
